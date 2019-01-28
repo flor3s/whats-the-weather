@@ -24,3 +24,25 @@ function initMap(){
     infoWindow.open(map, marker);
   });
 }
+
+function geocode(){
+  var location = 'Brooklyn NY';
+  axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+    params:{
+      address:location,
+      key: mapAPI
+    }
+  })
+  .then(function(response){
+    // log full response
+    console.log(response);
+
+    // format address
+    console.log(response.data.results[0].formatted_address);
+  })
+  .catch(function(error){
+    console.log(error);
+  });
+}
+
+geocode();
