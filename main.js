@@ -1,48 +1,91 @@
-function initMap(){
+function getMapWeather(e){
+  e.preventDefault();
 
-  //map options
-  var options = {
-    zoom:10,
-    center: {lat:40.7128,lng:-74.0060}
+  function geocode(){
+    var location = document.getElementById('location-input').value;
+    axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+      params:{
+        address:location,
+        key: mapAPI
+      }
+    })
+    .then(function(response){
+      // log full response
+      console.log(response);
+
+      // send info to DarkSky and Maps
+      var lat = response.data.results[0].geometry.location.lat;
+      var long = response.data.results[0].geometry.location.lng;
+      initMap(lat, long);
+      getWeather(lat, long);
+
+      // format address
+      var formattedAddress = response.data.results[0].formatted_address;
+      var formattedAddressOutput = `
+        <ul class="list-group">
+          <li class="list-group-item">${formattedAddress}</li>
+        </ul>
+      `;
+
+      //output to app
+      document.getElementById('formatted-address').innerHTML = formattedAddressOutput;
+    })
+    .catch(function(error){
+      console.log(error);
+    });
   }
-  
-  //new map
-  var map = new
-  google.maps.Map(document.getElementById('map'), options);
 
-  //add marker
-  var marker = new google.maps.Marker({
-    position:{lat:40.6782,lng:-73.9422},
-    map:map
-  });
-
-  var infoWindow = new google.maps.InfoWindow({
-    content:`<h1>Brooklyn</h1>`
-  });
-
-  marker.addListener('click', function(){
-    infoWindow.open(map, marker);
-  });
-}
-
-function geocode(){
-  var location = 'Brooklyn NY';
-  axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-    params:{
-      address:location,
-      key: mapAPI
+  function initMap(latitude, longitude){
+    //map options
+    var options = {
+      zoom:10,
+      center: {lat:latitude,lng:longitude}
     }
-  })
-  .then(function(response){
-    // log full response
-    console.log(response);
+    
+    //new map
+    var map = new
+    google.maps.Map(document.getElementById('map'), options);
 
-    // format address
-    console.log(response.data.results[0].formatted_address);
-  })
-  .catch(function(error){
-    console.log(error);
-  });
+    //add marker
+    var marker = new google.maps.Marker({
+      position:{lat:latitude,lng:longitude},
+      map:map
+    });
+  }
+
+  function getWeather(lat, long) {
+    axios.get(`https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/${weatherAPI}/${lat},${long}?exclude=minutely,daily,alerts,flags`)
+    .then(function(response){
+      console.log(response);
+
+      // grab weather data
+      var currentSummary = response.data.currently.summary;
+      var dailySummary = response.data.hourly.summary;
+      var realTemp = response.data.currently.temperature.toString();
+      var feelsTemp = response.data.currently.apparentTemperature.toString();
+
+      // format forecast
+      var formattedForecastOutput = `
+      <ul class="list-group">
+        <li class="list-group-item">Currently: ${currentSummary}</li>
+        <li class="list-group-item">Temperature: ${realTemp}&#8457 (Feels Like: ${feelsTemp}&#8457)</li>
+        <li class="list-group-item">Daily Summary: ${dailySummary}</li>
+      `
+
+      // output to app
+      document.getElementById('formatted-forecast').innerHTML = formattedForecastOutput;
+    }).catch(function(error){
+      console.log(error);
+    });
+  }
+
+  geocode();
 }
 
-geocode();
+// get location form
+
+var locationForm = document.getElementById('location-form');
+
+//listen for submit
+
+locationForm.addEventListener('submit', getMapWeather);

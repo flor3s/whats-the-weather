@@ -10,10 +10,22 @@
   <title>What's the Weather?</title>
 </head>
 <body>
-  <h1>Map</h1>
-  <div id="map"></div>
+  <h1 class="text-center">Weather API</h1>
+  <div class="container">
+    <h2 class="text-center">Enter Location: </h2>
+    <form id="location-form">
+      <input type="text" id="location-input" class="form-control form-control-lg">
+      <br>
+      <button type="submit" class="btn btn-primary btn-block">Submit</button>
+    </form>
+    <br>
+    <div id="map"></div>
+    <div id="formatted-address"></div>
+    <div id="formatted-forecast"></div>  
+  </div>
 
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdekaQh0x_0DS1WtMtsKhglUYCG5P5sVs&callback=initMap" async defer></script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY_HERE" async defer></script>
   <script src ="env.js"></script>
   <script src ="main.js"></script>
 </body>
