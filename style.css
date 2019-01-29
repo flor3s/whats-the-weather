@@ -1,4 +1,13 @@
+body {
+  background: #eaeaea;
+}
+
 #map {
   height: 400px;
-  width: 100%;
+  width: 50%;
+  min-width: 300px;
+}
+
+.response-data {
+  padding-left: 1em;
 }

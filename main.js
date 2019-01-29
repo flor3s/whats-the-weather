@@ -19,16 +19,16 @@ function getMapWeather(e){
       initMap(lat, long);
       getWeather(lat, long);
 
-      // format address
-      var formattedAddress = response.data.results[0].formatted_address;
-      var formattedAddressOutput = `
-        <ul class="list-group">
-          <li class="list-group-item">${formattedAddress}</li>
-        </ul>
-      `;
+      // // format address
+      // var formattedAddress = response.data.results[0].formatted_address;
+      // var formattedAddressOutput = `
+      //   <ul class="list-group">
+      //     <li class="list-group-item">${formattedAddress}</li>
+      //   </ul>
+      // `;
 
-      //output to app
-      document.getElementById('formatted-address').innerHTML = formattedAddressOutput;
+      // //output to app
+      // document.getElementById('formatted-address').innerHTML = formattedAddressOutput;
     })
     .catch(function(error){
       console.log(error);
@@ -66,10 +66,11 @@ function getMapWeather(e){
 
       // format forecast
       var formattedForecastOutput = `
-      <ul class="list-group">
-        <li class="list-group-item">Currently: ${currentSummary}</li>
-        <li class="list-group-item">Temperature: ${realTemp}&#8457 (Feels Like: ${feelsTemp}&#8457)</li>
-        <li class="list-group-item">Daily Summary: ${dailySummary}</li>
+        <h2>Now</h2>
+        <h1><strong>${realTemp}&#8457</strong></h1>
+        <p>${currentSummary}. Feels like: ${feelsTemp}&#8457</p>
+        <h2>Next 24 Hours</h2>
+        <p>${dailySummary}</p>
       `
 
       // output to app
