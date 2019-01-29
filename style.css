@@ -3,8 +3,8 @@ body {
 }
 
 #map {
-  height: 400px;
-  width: 50%;
+  height: 35em;
+  width: 100%;
   min-width: 300px;
 }
 

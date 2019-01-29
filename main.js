@@ -16,7 +16,6 @@ function getMapWeather(e){
       // send info to DarkSky and Maps
       var lat = response.data.results[0].geometry.location.lat;
       var long = response.data.results[0].geometry.location.lng;
-      initMap(lat, long);
       getWeather(lat, long);
 
       // // format address
@@ -35,24 +34,6 @@ function getMapWeather(e){
     });
   }
 
-  function initMap(latitude, longitude){
-    //map options
-    var options = {
-      zoom:10,
-      center: {lat:latitude,lng:longitude}
-    }
-    
-    //new map
-    var map = new
-    google.maps.Map(document.getElementById('map'), options);
-
-    //add marker
-    var marker = new google.maps.Marker({
-      position:{lat:latitude,lng:longitude},
-      map:map
-    });
-  }
-
   function getWeather(lat, long) {
     axios.get(`https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/${weatherAPI}/${lat},${long}?exclude=minutely,daily,alerts,flags`)
     .then(function(response){
@@ -66,17 +47,42 @@ function getMapWeather(e){
 
       // format forecast
       var formattedForecastOutput = `
-        <h2>Now</h2>
-        <h1><strong>${realTemp}&#8457</strong></h1>
-        <p>${currentSummary}. Feels like: ${feelsTemp}&#8457</p>
-        <h2>Next 24 Hours</h2>
-        <p>${dailySummary}</p>
+        <h2><strong>${realTemp}&#8457</strong></h2>
+        <p>${currentSummary}. Feels like: ${feelsTemp}&#176. Next 24 Hours: ${dailySummary}</p>
       `
 
-      // output to app
-      document.getElementById('formatted-forecast').innerHTML = formattedForecastOutput;
+      // output to map
+      initMap(lat, long, formattedForecastOutput);
+
     }).catch(function(error){
       console.log(error);
+    });
+  }
+
+  function initMap(latitude, longitude, markerInfo){
+    //map options
+    var options = {
+      zoom:9,
+      center: {lat:latitude,lng:longitude}
+    }
+    
+    //new map
+    var map = new
+    google.maps.Map(document.getElementById('map'), options);
+
+    //add marker
+    var marker = new google.maps.Marker({
+      position:{lat:latitude,lng:longitude},
+      map:map
+    });
+
+    //add info to marker
+    var infoWindow = new google.maps.InfoWindow({
+      content:`${markerInfo}`
+    });
+
+    marker.addListener('click', function(){
+      infoWindow.open(map, marker);
     });
   }
 
