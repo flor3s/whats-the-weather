@@ -1,3 +1,3 @@
 ## What's The Weather?
 
-This is a (currently in progress) app that takes a user submitted address and displays the google map for it, using the Google Maps API and the Google Geocode API. It will allow for custom markers to be placed and will also pull weather forecast information displayed below the map via the DarkSky weather API
+This is an app that takes a user submitted address and displays the Google map for it, using the Google Maps API and the Google Geocode API. It also makes an asynchronous call to the DarkSky Weather API and also displays forecast information in a tooltip displayed above the map marker.
